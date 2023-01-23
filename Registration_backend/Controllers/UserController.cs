@@ -7,18 +7,18 @@ using Registration_backend.Models.Interfaces;
 
 namespace Registration_backend.Controllers
 {
-    [ApiController]
     [Route("api/[controller]")]
+    [ApiController]
     public class UserController : ControllerBase
     {
-        IUserRepository userRepository;
+        private readonly IUserRepository userRepository;
 
         public UserController(IUserRepository userRepository)
         {
             this.userRepository = userRepository;
         }
 
-        [HttpGet]
+        [HttpGet("all")]
         public ActionResult<List<User>> Get()
         {
             List<User> users = userRepository.Get();

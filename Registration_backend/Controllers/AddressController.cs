@@ -8,7 +8,7 @@ namespace Registration_backend.Controllers
     [Route("api/[controller]")]
     public class AddressController : ControllerBase
     {
-        IAddressRepository addressRepository;
+        private readonly IAddressRepository addressRepository;
 
         public AddressController(IAddressRepository addressRepository)
         {
@@ -23,11 +23,10 @@ namespace Registration_backend.Controllers
 
         }
 
-        [HttpGet]
-        [Route("{id:int}")]
+        [HttpGet("id")]
         public ActionResult<Address> GetAddressById([FromRoute] int id)
         {
-            var address = addressRepository.GetAddressById(id);
+            var address = addressRepository.GetById(id);
 
             if (address == null)
             {
@@ -38,36 +37,79 @@ namespace Registration_backend.Controllers
         }
 
         [HttpPost]
-        [Route("{id:int}")]
-        public ActionResult<bool> AddAddress([FromRoute] int id, [FromBody] Address address)
+        public ActionResult<bool> AddAddress([FromBody] AddressData address)
         {
             if (address == null)
             {
                 return NotFound();
             }
 
-            return Ok(addressRepository.AddAddress(id, address));
+            return Ok(addressRepository.AddAddress(address));
         }
 
-        [HttpPut]
-        [Route("{id:int}")]
-        public ActionResult<bool> UpdateAddress([FromRoute] int id, [FromBody] Address updateAddress)
+        [HttpPut("City")]
+        public ActionResult<Address> UpdateUserCity([FromQuery] int id, [FromQuery] string data)
         {
-            if (updateAddress == null)
+            var address = addressRepository.UpdateUserCity(id, data);
+
+            if (address == null)
             {
                 return NotFound();
             }
 
-            var existingAddress = addressRepository.UpdateAddress(id, updateAddress);
+            return Ok(address);
+        }
 
-            return Ok(existingAddress);
+        [HttpPut("Street")]
+        public ActionResult<Address> UpdateUserStreet([FromQuery] int id, [FromQuery] string data)
+        {
+            var address = addressRepository.UpdateUserStreet(id, data);
+
+            if (address == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(address);
+        }
+
+        [HttpPut("HouseNumber")]
+        public ActionResult<Address> UpdateUserHouseNumber([FromQuery] int id, [FromQuery] string data)
+        {
+            var address = addressRepository.UpdateUserHouseNumber(id, data);
+
+            if (address == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(address);
+        }
+
+        [HttpPut("FlatNumber")]
+        public ActionResult<Address> UpdateUserFlatNumber([FromQuery] int id, [FromQuery] string data)
+        {
+            var address = addressRepository.UpdateUserFlatNumber(id, data);
+
+            if (address == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(address);
         }
 
         [HttpDelete]
-        [Route("{id:int}")]
-        public ActionResult<bool> DeleteAddress([FromRoute] int id)
+        public ActionResult<bool> DeleteAddress([FromQuery] int id)
         {
-            return Ok(addressRepository.DeleteAddress(id));
+            var address = addressRepository.DeleteAddress(id);
+
+            if (address == null)
+            {
+                return null;
+            }
+
+            return Ok(address);
         }
     }
 }

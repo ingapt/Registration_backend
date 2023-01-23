@@ -8,7 +8,7 @@ namespace Registration_backend.Controllers
     [Route("api/[controller]")]
     public class UserInfoController : ControllerBase
     {
-        IUserInfoRepository userInfoRepository;
+        private readonly IUserInfoRepository userInfoRepository;
 
         public UserInfoController()
         {
@@ -23,11 +23,23 @@ namespace Registration_backend.Controllers
 
         }
 
-        [HttpGet]
-        [Route("{id:int}")]
-        public ActionResult<UserInfo> GetUserInfoById([FromRoute] int id)
+        [HttpGet("id")]
+        public ActionResult<UserInfo> GetById([FromQuery] int id)
         {
-            var userInfo = userInfoRepository.GetUserInfoById(id);
+            var userInfo = userInfoRepository.GetById(id);
+
+            if (userInfo == null)
+            { 
+                return null; 
+            }
+
+            return Ok(userInfo);
+        }
+
+        [HttpPost]
+        public ActionResult<UserInfo> AddUserInfo([FromBody] UserInfoData data)
+        {
+            var userInfo = userInfoRepository.AddUserInfo(data);
 
             if (userInfo == null)
             {
@@ -37,37 +49,95 @@ namespace Registration_backend.Controllers
             return Ok(userInfo);
         }
 
-        [HttpPost]
-        [Route("{id:int}")]
-        public ActionResult<bool> AddUserInfo([FromRoute] int id,[FromBody] UserInfo userInfo)
+        [HttpPut("Name")]
+        public ActionResult<UserInfo> UpdateUserName([FromQuery] int id, [FromQuery] string data)
         {
+            var userInfo = userInfoRepository.UpdateUserName(id, data);
+
             if (userInfo == null)
             {
-                return NotFound();
+                return null;
             }
 
-            return Ok(userInfoRepository.AddUserInfo(id, userInfo));
+            return Ok(userInfo);
         }
 
-        [HttpPut]
-        [Route("{id:int}")]
-        public ActionResult<bool> UpdateUser([FromRoute] int id, [FromBody] UserInfo updateUserInfo)
+        [HttpPut("Surname")]
+        public ActionResult<UserInfo> UpdateUserSurname([FromQuery] int id, [FromQuery] string data)
         {
-            if (updateUserInfo == null)
+            var userInfo = userInfoRepository.UpdateUserSurname(id, data);
+
+            if (userInfo == null)
             {
-                return NotFound();
+                return null;
             }
 
-            var existingUser = userInfoRepository.UpdateUserInfo(id, updateUserInfo);
-           
-            return Ok(existingUser);
+            return Ok(userInfo);
+        }
+
+        [HttpPut("PersonalCode")]
+        public ActionResult<UserInfo> UpdateUserPersonalCode([FromQuery] int id, [FromQuery] string data)
+        {
+            var userInfo = userInfoRepository.UpdateUserPersonalCode(id, data);
+
+            if (userInfo == null)
+            {
+                return null;
+            }
+
+            return Ok(userInfo);
+        }
+
+        [HttpPut("PhoneNumber")]
+        public ActionResult<UserInfo> UpdateUserPhoneNumber([FromQuery] int id, [FromQuery] string data)
+        {
+            var userInfo = userInfoRepository.UpdateUserPhoneNumber(id, data);
+
+            if (userInfo == null)
+            {
+                return null;
+            }
+
+            return Ok(userInfo);
+        }
+
+        [HttpPut("Email")]
+        public ActionResult<UserInfo> UpdateUserEmail([FromQuery] int id, [FromQuery] string data)
+        {
+            var userInfo = userInfoRepository.UpdateUserEmail(id, data);
+
+            if (userInfo == null)
+            {
+                return null;
+            }
+
+            return Ok(userInfo);
+        }
+
+        [HttpPut("PhotoData")]
+        public ActionResult<UserInfo> UpdateUserPhoto([FromQuery] int id, [FromBody] UserInfoData data)
+        {
+            var userInfo = userInfoRepository.UpdateUserPhoto(id, data);
+
+            if (userInfo == null)
+            {
+                return null;
+            }
+
+            return Ok(userInfo);
         }
 
         [HttpDelete]
-        [Route("{id:int}")]
-        public ActionResult<bool> DeleteUser([FromRoute] int id)
+        public ActionResult<UserInfo> DeleteUser([FromQuery] int id)
         {
-           return Ok(userInfoRepository.DeleteUserInfo(id));
+           var userInfo = userInfoRepository.DeleteUserInfo(id);
+
+            if (userInfo == null)
+            {
+                return null;
+            }
+
+            return Ok(userInfo);
         }
     }
 }

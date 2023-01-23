@@ -1,4 +1,5 @@
-﻿using Registration_backend.Data;
+﻿using Microsoft.AspNetCore.Mvc;
+using Registration_backend.Data;
 using Registration_backend.Models.Entities;
 using Registration_backend.Models.Interfaces;
 
@@ -19,74 +20,136 @@ namespace Registration_backend.Models.Repositories
             return usersInfo;
         }
 
-        public bool AddUserInfo(int userId, UserInfoData data)
+        public UserInfo GetById(int Id)
         {
-            if (data != null)
-            {
-                var userInfo = new UserInfo()
-                {
-                    UserInfoOfUserId =userId,
-                    Photo = Convert.FromBase64String(data.PhotoData),
-                    Name = data.Name,
-                    Surname = data.Surname,
-                    PersonalCode = data.PersonalCode,
-                    PhoneNumber = data.PhoneNumber,
-                    Email = data.Email,
-                };
-
-                _dbContext.UsersInfo.Add(userInfo);
-                _dbContext.SaveChanges();
-
-                return true;
-            }
-            return false;
-        }
-
-        public UserInfo GetUserInfoById(int userId)
-        {
-            var userInfo = _dbContext.UsersInfo.SingleOrDefault(x => x.UserInfoOfUserId == userId);
+            var userInfo = _dbContext.UsersInfo.SingleOrDefault(x => x.UserInfoOfUserId == Id);
 
             return userInfo;
         }
 
-        public bool UpdateUserInfo(int userId, UserInfo updateUserInfo)
+        public UserInfo AddUserInfo(UserInfoData data)
         {
-            if (updateUserInfo != null)
+
+            var userInfo = new UserInfo()
             {
-                var existingUserInfo = _dbContext.UsersInfo.SingleOrDefault(x => x.UserInfoOfUserId == userId);
+                UserInfoOfUserId = data.UserId,
+                Photo = Convert.FromBase64String(data.PhotoData),
+                Name = data.Name,
+                Surname = data.Surname,
+                PersonalCode = data.PersonalCode,
+                PhoneNumber = data.PhoneNumber,
+                Email = data.Email,
+            };
 
-                //   existingUserInfo.Photo = updateUserInfo.Photo;
-                existingUserInfo.Name = updateUserInfo.Name;
-                existingUserInfo.Surname = updateUserInfo.Surname;
-                existingUserInfo.PersonalCode = updateUserInfo.PersonalCode;
-                existingUserInfo.PhoneNumber = updateUserInfo.PhoneNumber;
-                existingUserInfo.Email = updateUserInfo.Email;
+            _dbContext.UsersInfo.Add(userInfo);
+            _dbContext.SaveChanges();
 
-                _dbContext.SaveChanges();
-
-                return true;
-            }
-            return false;
+            return userInfo;
         }
 
-        public bool DeleteUserInfo(int userId)
+        public UserInfo UpdateUserName(int id, string data)
         {
-            var existingUserInfo = _dbContext.UsersInfo.SingleOrDefault(x => x.UserInfoOfUserId == userId);
+            var userInfo = _dbContext.UsersInfo.SingleOrDefault(x => x.Id == id);
 
-            if (existingUserInfo == null)
+            if (userInfo == null)
             {
-                return false;
+                return null;
             }
 
-            _dbContext.UsersInfo.Remove(existingUserInfo);
+            userInfo.Name = data;
+            _dbContext.SaveChanges();
+
+            return userInfo;
+        }
+
+        public UserInfo UpdateUserSurname(int id, string data)
+        {
+            var userInfo = _dbContext.UsersInfo.SingleOrDefault(x => x.Id == id);
+
+            if (userInfo == null)
+            {
+                return null;
+            }
+
+            userInfo.Surname = data;
+            _dbContext.SaveChanges();
+
+            return userInfo;
+        }
+
+        public UserInfo UpdateUserPersonalCode(int id, string data)
+        {
+            var userInfo = _dbContext.UsersInfo.SingleOrDefault(x => x.Id == id);
+
+            if (userInfo == null)
+            {
+                return null;
+            }
+
+            userInfo.PersonalCode = data;
+            _dbContext.SaveChanges();
+
+            return userInfo;
+        }
+
+        public UserInfo UpdateUserPhoneNumber(int id, string data)
+        {
+            var userInfo = _dbContext.UsersInfo.SingleOrDefault(x => x.Id == id);
+
+            if (userInfo == null)
+            {
+                return null;
+            }
+
+            userInfo.PhoneNumber = data;
+            _dbContext.SaveChanges();
+
+            return userInfo;
+        }
+
+        public UserInfo UpdateUserEmail(int id, string data)
+        {
+            var userInfo = _dbContext.UsersInfo.SingleOrDefault(x => x.Id == id);
+
+            if (userInfo == null)
+            {
+                return null;
+            }
+
+            userInfo.Email = data;
+            _dbContext.SaveChanges();
+
+            return userInfo;
+        }
+
+        public  UserInfo UpdateUserPhoto(int id, UserInfoData data)
+        {
+            var userInfo = _dbContext.UsersInfo.SingleOrDefault(x => x.Id == id);
+
+            if (userInfo == null)
+            {
+                return null;
+            }
+
+            userInfo.Photo = Convert.FromBase64String(data.PhotoData);
+            _dbContext.SaveChanges();
+
+            return userInfo;
+        }
+
+        public UserInfo DeleteUserInfo(int Id)
+        {
+            var userInfo = _dbContext.UsersInfo.SingleOrDefault(x => x.UserInfoOfUserId == Id);
+
+            if (userInfo == null)
+            {
+                return null;
+            }
+
+            _dbContext.UsersInfo.Remove(userInfo);
             _dbContext.SaveChangesAsync();
 
-            return true;
-        }
-
-        public bool AddUserInfo(int userId, UserInfo data)
-        {
-            throw new NotImplementedException();
+            return userInfo;
         }
     }
 }

@@ -5,11 +5,13 @@ namespace Registration_backend.Models.Interfaces
     public interface IAddressRepository
     {
         List<Address> Get();
-        Address GetAddressById(int UserInfoId);
-        bool AddAddress(int userInfoId, Address data);
+        Address GetById(int id);
+        Address AddAddress(AddressData data);
+        Address UpdateUserCity(int id, string data);
+        Address UpdateUserStreet(int id, string data);
+        Address UpdateUserHouseNumber(int id, string data);
+        Address UpdateUserFlatNumber(int id, string data);
+        Address DeleteAddress(int id);
 
-        bool UpdateAddress(int userInfoId, Address updateAddress);
-
-        bool DeleteAddress(int userInfoId);
     }
 }

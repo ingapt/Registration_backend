@@ -5,11 +5,15 @@ namespace Registration_backend.Models.Interfaces
     public interface IUserInfoRepository
     {
         List<UserInfo> Get();
-        UserInfo GetUserInfoById(int userid);
-        bool AddUserInfo(int userId, UserInfo data);
+        UserInfo GetById(int Id);
+        UserInfo AddUserInfo(UserInfoData data);
+        UserInfo UpdateUserName(int id, string data);
+        UserInfo UpdateUserSurname(int id, string data);
+        UserInfo UpdateUserPersonalCode(int id, string data);
+        UserInfo UpdateUserPhoneNumber(int id, string data);
+        UserInfo UpdateUserEmail(int id, string data);
+        UserInfo UpdateUserPhoto(int id, UserInfoData data);
+        UserInfo DeleteUserInfo(int Id);
 
-        bool UpdateUserInfo(int userId, UserInfo updateUserInfo);
-
-        bool DeleteUserInfo(int userId);
     }
 }

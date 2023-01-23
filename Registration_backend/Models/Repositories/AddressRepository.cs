@@ -19,67 +19,107 @@ namespace Registration_backend.Models.Repositories
             return addresses;
         }
 
-        public bool AddAddress(int userInfoId, Address data)
+        public Address GetById(int id)
         {
-            if (data != null)
-            {
-                Address address = new Address()
-                {
-                    City = data.City,
-                    Street = data.Street,
-                    HouseNumber = data.HouseNumber,
-                    FlatNumber = data.FlatNumber,
-                    AddressOfUserInfoId = userInfoId,
-                };
-
-                _dbContext.Addresses.Add(address);
-                _dbContext.SaveChanges();
-
-                return true;
-            }
-
-            return false;
-        }
-
-        public Address GetAddressById(int UserInfoId)
-        {
-            var address = _dbContext.Addresses.SingleOrDefault(x => x.AddressOfUserInfoId == UserInfoId);
+            var address = _dbContext.Addresses.SingleOrDefault(x => x.AddressOfUserInfoId == id);
 
             return address;
         }
 
-        public bool UpdateAddress(int userInfoId, Address updateAddress)
+        public Address AddAddress(AddressData data)
         {
-            if (updateAddress != null)
+            Address address = new Address()
             {
-                var existingAddress = _dbContext.Addresses.SingleOrDefault(x => x.AddressOfUserInfoId == userInfoId);
+                City = data.City,
+                Street = data.Street,
+                HouseNumber = data.HouseNumber,
+                FlatNumber = data.FlatNumber,
+                AddressOfUserInfoId = data.AddressOfUserInfoId,
+            };
 
-                existingAddress.City = updateAddress.City;
-                existingAddress.Street = updateAddress.Street;
-                existingAddress.HouseNumber = updateAddress.HouseNumber;
-                existingAddress.FlatNumber = updateAddress.FlatNumber;
-
-                _dbContext.SaveChanges();
-
-                return true;
-            }
-
-            return false;
-        }
-
-        public bool DeleteAddress(int userInfoId)
-        {
-            var existingAddress = _dbContext.Addresses.SingleOrDefault(x => x.AddressOfUserInfoId == userInfoId);
-
-            if (existingAddress == null)
-            {
-                return false;
-            }
-
-            _dbContext.Addresses.Remove(existingAddress);
+            _dbContext.Addresses.Add(address);
             _dbContext.SaveChanges();
 
-            return true;
+            return address;
+        }
+
+         public Address UpdateUserCity(int id, string data)
+         {
+
+            var address = _dbContext.Addresses.SingleOrDefault(x => x.AddressOfUserInfoId == id);
+            if (address == null)
+            {
+                return null;
+            }
+
+            address.City = data;
+
+            _dbContext.SaveChanges();
+
+           return address;
+         }
+
+        public Address UpdateUserStreet(int id, string data)
+        {
+
+            var address = _dbContext.Addresses.SingleOrDefault(x => x.AddressOfUserInfoId == id);
+            if (address == null)
+            {
+                return null;
+            }
+
+            address.Street = data;
+
+            _dbContext.SaveChanges();
+
+            return address;
+        }
+
+        public Address UpdateUserHouseNumber(int id, string data)
+        {
+
+            var address = _dbContext.Addresses.SingleOrDefault(x => x.AddressOfUserInfoId == id);
+            if (address == null)
+            {
+                return null;
+            }
+
+            address.HouseNumber = data;
+
+            _dbContext.SaveChanges();
+
+            return address;
+        }
+
+        public Address UpdateUserFlatNumber(int id, string data)
+        {
+
+            var address = _dbContext.Addresses.SingleOrDefault(x => x.AddressOfUserInfoId == id);
+            if (address == null)
+            {
+                return null;
+            }
+
+            address.FlatNumber = data;
+
+            _dbContext.SaveChanges();
+
+            return address;
+        }
+
+        public Address DeleteAddress(int id)
+        {
+            var address = _dbContext.Addresses.SingleOrDefault(x => x.AddressOfUserInfoId == id);
+
+            if (address == null)
+            {
+                return null;
+            }
+
+            _dbContext.Addresses.Remove(address);
+            _dbContext.SaveChanges();
+
+            return address;
         }
     }
 }
