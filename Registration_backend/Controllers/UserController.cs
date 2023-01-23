@@ -96,7 +96,6 @@ namespace Registration_backend.Controllers
                 return NotFound();
             }
 
-
             return Ok(user);
         }
     }
