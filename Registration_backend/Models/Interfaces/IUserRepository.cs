@@ -5,13 +5,15 @@ namespace Registration_backend.Models.Interfaces
     public interface IUserRepository
     {
         List<User> Get();
-        User GetUserById(int id);
-        bool AddUser(UserData userData);
+        User GetUser(string username);
+        User AddUser(UserData userData);
 
-        bool UpdateUser(int id, User updateUser);
+        User UpdateUser(int id, UserData updateUser);
 
-        bool DeleteUser(int id);
+        User Update(int id, string data);
 
-        User UserLogin(User user);
+        User DeleteUser(int id);
+
+        User UserLogin(UserData user);
     }
 }

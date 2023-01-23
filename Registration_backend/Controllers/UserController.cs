@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Registration_backend.Data;
 using Registration_backend.Models.Entities;
@@ -25,11 +26,10 @@ namespace Registration_backend.Controllers
 
         }
 
-        [HttpGet]
-        [Route("{id:int}")]
-        public ActionResult<User> GetUserById([FromRoute] int id)
+        [HttpGet("user")]
+        public ActionResult<User> GetUser([FromQuery] string username)
         {
-            var user = userRepository.GetUserById(id);
+            User user = userRepository.GetUser(username);
 
             if (user == null)
             {
@@ -39,8 +39,18 @@ namespace Registration_backend.Controllers
             return Ok(user);
         }
 
+        [HttpGet]
+        public ActionResult<User> UserLogin([FromQuery] string username, [FromQuery] string password)
+        {
+            var userData = new UserData { Password = password, Username=username};
+
+            var user = userRepository.UserLogin(userData);
+
+            return Ok(user);
+        }
+
         [HttpPost]
-        public ActionResult<bool> AddUser([FromBody] UserData userData)
+        public ActionResult<User> AddUser([FromBody] UserData userData)
         {
             if (userData == null)
             {
@@ -51,38 +61,43 @@ namespace Registration_backend.Controllers
         }
 
         [HttpPut]
-        [Route("{id:int}")]
-        public ActionResult<bool> UpdateUser([FromRoute] int id, [FromBody] User updateUser)
+        public ActionResult<User> UpdateUser([FromQuery] int id, [FromBody] UserData updateUser)
         {
             if (updateUser == null)
             {
                 return NotFound();
             }
 
-            var existingUser = userRepository.UpdateUser(id, updateUser);
-            return Ok(existingUser);
+            var user = userRepository.UpdateUser(id, updateUser);
+            
+            return Ok(user);
         }
 
-        [HttpDelete]
-        [Route("{id:int}")]
-        public ActionResult<bool> DeleteUser([FromRoute] int id)
-        {
-            return Ok(userRepository.DeleteUser(id));
-        }
+        [HttpPut("Role")]
+        public ActionResult<User> Update([FromQuery] int id, [FromQuery] string value)
+        { 
+            var user = userRepository.Update(id, value);
 
-        [HttpPost]
-        [Route("login")]
-        public ActionResult<User> UserLogin([FromBody] User user)
-        {
-            var existingUser = userRepository.UserLogin(user);
-
-            if (existingUser == null)
-            {
-                return BadRequest("Vartotojo vardas arba slaptažodis yra neteisingi.");
+            if (user == null)
+            { 
+                NotFound(); 
             }
 
             return Ok(user);
         }
 
+        [HttpDelete]
+        public ActionResult<User> DeleteUser([FromQuery] int id)
+        {
+            var user = userRepository.DeleteUser(id);
+
+            if (user == null)
+            { 
+                return NotFound();
+            }
+
+
+            return Ok(user);
+        }
     }
 }

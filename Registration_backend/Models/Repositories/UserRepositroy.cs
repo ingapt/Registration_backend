@@ -19,68 +19,85 @@ namespace Registration_backend.Models.Repositories
             return users;
         }
 
-        public bool AddUser(UserData userData)
+        public User AddUser(UserData userData)
         {
-            if (userData != null)
+            User user = new User()
             {
-                User user = new User()
-                {
-                    UserName = userData.UserName,
-                    Password = userData.Password,
-                    Role = userData.Role,
-                };
+                UserName = userData.Username,
+                Password = userData.Password,
+                Role = userData.Role,
+            };
 
-                _dbContext.Users.Add(user);
-                _dbContext.SaveChanges();
-
-                return true;
-            }
-
-            return false;
-        }
-
-        public User GetUserById(int id)
-        {
-            var user = _dbContext.Users.Find(id);
+            _dbContext.Users.Add(user);
+            _dbContext.SaveChanges();
 
             return user;
         }
 
-        public bool UpdateUser(int id, User updateUser)
+        public User GetUser(string data)
         {
-            if (updateUser != null)
+            var user = _dbContext.Users.FirstOrDefault(x => x.UserName == data);
+
+            if (user == null)
             {
-                var existingUser = _dbContext.Users.Find(id);
-
-                existingUser.Role = updateUser.Role;
-                existingUser.Password = updateUser.Password;
-
-                _dbContext.SaveChanges();
-
-                return true;
+                return null;
             }
 
-            return false;
+            return user;
         }
 
-        public bool DeleteUser(int id)
+        public User UpdateUser(int id, UserData updateUser)
         {
-            var existingUser = _dbContext.Users.Find(id);
+            var user = _dbContext.Users.SingleOrDefault(x => x.Id == id);
 
-            if (existingUser == null)
+            if (user == null)
             {
-                return false;
+                return null;
             }
 
-            _dbContext.Users.Remove(existingUser);
+            user.Password = updateUser.Password;
+            _dbContext.SaveChanges();
+
+            return user;
+        }
+
+        public User Update(int id, string data)
+        {
+            var user = _dbContext.Users.SingleOrDefault(x => x.Id == id);
+            if (user == null)
+            {
+                return null;
+            }
+
+            user.Role = data;
+            _dbContext.SaveChanges();
+
+            return user;
+        }
+
+        public User DeleteUser(int id)
+        {
+            var user = _dbContext.Users.SingleOrDefault(x => x.Id == id);
+
+            if (user == null)
+            {
+                return null;
+            }
+
+            _dbContext.Users.Remove(user);
             _dbContext.SaveChangesAsync();
 
-            return true;
+            return user;
         }
 
-        public User UserLogin(User user)
+        public User UserLogin(UserData user)
         {
-            var existingUser = _dbContext.Users.Where(x => x.UserName == user.UserName && x.Password == user.Password).SingleOrDefault();
+            var existingUser = _dbContext.Users.SingleOrDefault(x => x.UserName == user.Username && x.Password == user.Password);
+
+            if (user == null)
+            {
+                return null;
+            }
 
             return existingUser;
         }

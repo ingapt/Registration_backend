@@ -8,5 +8,7 @@
         public string FlatNumber { get; set; }
         public int? AddressOfUserInfoId { get; set; }
         public virtual UserInfo UserInfo { get; set; }
+
+
     }
 }
